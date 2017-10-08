@@ -122,22 +122,21 @@ func call(calls int) {
 			log.Println("Started call", nrCall, "of", TotalCalls)
 			tmpFile := fmt.Sprintf("REC_%d_%d", TotalCalls, nrCall)
 			//localtime := time.Now().UnixNano()
-			sound_file := tmpFile 
+			sound_file := tmpFile
 			//pkt_dmp := tmpFile + ".pcap"
 			defer wg.Done()
 			SIP_caller_id := SIP_CALLER_ID + (nrCall % 20)
 			SIP_dst_num := SIP_DESTINATION_NUMBER - nrCall
-			cwd , _ := os.Getwd()
-			callerArgs := fmt.Sprintf("docker run --rm -v %s:/data -w /data mfrw/pjsua-voip python ./../record-samples.py %s %s %d %d %s %d %d %d",cwd, sound_file, VOIP_SERVER, VOIP_SERVER_PORT, SIP_caller_id, SIP_CALLER_PASSWORD, SIP_dst_num, CALL_TIMEOUT, CALL_SAMPLE_RATE)
+			cwd, _ := os.Getwd()
+			callerArgs := fmt.Sprintf("docker run --rm -v %s:/data -w /data mfrw/pjsua-voip python ./../record-samples.py %s %s %d %d %s %d %d %d", cwd, sound_file, VOIP_SERVER, VOIP_SERVER_PORT, SIP_caller_id, SIP_CALLER_PASSWORD, SIP_dst_num, CALL_TIMEOUT, CALL_SAMPLE_RATE)
 			log.Println(callerArgs)
-			cmd := exec.Command("sh", "-c",  callerArgs)
+			cmd := exec.Command("sh", "-c", callerArgs)
 			//otpt, err := cmd.CombinedOutput()
 			//log.Println(string(otpt))
 			err := cmd.Run()
 			if err != nil {
 				log.Println(err)
 			}
-
 
 		}(i, calls)
 
@@ -149,9 +148,9 @@ func call(calls int) {
 // call parallely using goroutines (glorified threads)
 func parallel_calls() {
 	for i := 32; i <= PARALLEL_CALLS; i++ {
-//		iperf(i)
+		iperf(i)
 
-//		fping(i)
+		//		fping(i)
 
 		// make a call
 		call(i)
